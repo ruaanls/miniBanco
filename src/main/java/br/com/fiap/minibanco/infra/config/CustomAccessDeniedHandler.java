@@ -18,7 +18,7 @@ import java.io.IOException;
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        AuthInvalid error = new AuthInvalid(HttpStatus.FORBIDDEN, "Acesso negado: Você não tem permissão para acessar este recurso. Apenas administradores podem realizar esta operação.");
+        AuthInvalid error = new AuthInvalid(HttpStatus.FORBIDDEN, "Acesso negado a lojistas: Você não tem permissão para acessar este recurso. Apenas usuários do tipo COMUM podem realizar esta operação.");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);

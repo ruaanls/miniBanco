@@ -16,6 +16,5 @@ public class DataUsersTransactionDTO
     private String nomeCompleto;
     private String cpf;
     private String tipo;
-    private BigDecimal saldo;
 
 }

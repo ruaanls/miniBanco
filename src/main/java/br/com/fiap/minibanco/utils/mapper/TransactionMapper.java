@@ -28,8 +28,7 @@ public interface TransactionMapper
 
             @Mapping(source = "userJpa.nome_completo", target = "nomeCompleto"),
             @Mapping(source = "userJpa.cpf", target = "cpf"),
-            @Mapping(source = "userJpa.tipo", target = "tipo"),
-            @Mapping(source = "userJpa.saldo", target = "saldo"),
+            @Mapping(source = "userJpa.tipo", target = "tipo")
 
     })
     DataUsersTransactionDTO userDtoToDataUsersTransactionDto(UserJpa userJpa);

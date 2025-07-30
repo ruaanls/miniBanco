@@ -8,5 +8,5 @@ import java.math.BigDecimal;
 public interface TransactionUsecases
 {
     TransactionResponseDTO transferir(TransactionRequestDTO transactionRequestDTO);
-    boolean verificarTransacao(TransactionRequestDTO transactionRequestDTO);
+    //boolean verificarTransacao(TransactionRequestDTO transactionRequestDTO);
 }

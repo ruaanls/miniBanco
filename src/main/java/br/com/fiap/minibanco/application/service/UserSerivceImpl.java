@@ -7,6 +7,9 @@ import br.com.fiap.minibanco.core.user.DTO.UserLoginResponseDTO;
 import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
 import br.com.fiap.minibanco.core.user.DTO.UserResponseDTO;
 import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
+import br.com.fiap.minibanco.infra.exception.EmailExistsException;
+import br.com.fiap.minibanco.infra.exception.UserExistsException;
+import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
 import br.com.fiap.minibanco.utils.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +35,13 @@ public class UserSerivceImpl implements UserUsecases
 
     @Override
     public void registrar(UserRegistroDto registroDto) {
-        if(userRepositoryPort.findByCpf(registroDto.getCpf())!= null)
+        if(userRepositoryPort.findUserJpaByCpf(registroDto.getCpf(), true).isPresent())
         {
-            throw new RuntimeException();
+            throw new UserExistsException();
+        }
+        if(this.userRepositoryPort.findUserJpaByEmail(registroDto.getEmail()).isPresent())
+        {
+            throw new EmailExistsException(registroDto.getEmail());
         }
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registroDto.getSenha());
         UserJpa userJpa = this.userMapper.requestToUser(registroDto, senhaCriptografada);
@@ -52,25 +59,25 @@ public class UserSerivceImpl implements UserUsecases
 
     @Override
     public UserJpa findUserJpaByCpf(String cpf) {
-        if(this.userRepositoryPort.findUserJpaByCpf(cpf).isEmpty())
+        if(this.userRepositoryPort.findUserJpaByCpf(cpf, false).isEmpty())
         {
-            throw new RuntimeException();
+            throw new UserNotFoundException(cpf);
         }
         else
         {
-            return this.userRepositoryPort.findUserJpaByCpf(cpf).get();
+            return this.userRepositoryPort.findUserJpaByCpf(cpf, false).get();
         }
     }
 
     @Override
     public UserResponseDTO findUserResponseByCpf(String cpf) {
-        if(this.userRepositoryPort.findUserJpaByCpf(cpf).isEmpty())
+        if(this.userRepositoryPort.findUserJpaByCpf(cpf, false).isEmpty())
         {
-            throw new RuntimeException();
+            throw new UserNotFoundException(cpf);
         }
         else
         {
-            UserResponseDTO userResponse =  this.userMapper.userToUserResponse(this.userRepositoryPort.findUserJpaByCpf(cpf).get());
+            UserResponseDTO userResponse =  this.userMapper.userToUserResponse(this.userRepositoryPort.findUserJpaByCpf(cpf, false).get());
             return userResponse;
         }
     }

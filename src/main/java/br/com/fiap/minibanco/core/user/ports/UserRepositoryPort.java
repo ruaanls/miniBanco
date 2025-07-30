@@ -9,6 +9,7 @@ public interface UserRepositoryPort
 {
     void registrar(UserJpa userJpa);
     UserDetails findByCpf(String cpf);
-    Optional<UserJpa> findUserJpaByCpf(String cpf);
+    Optional<UserJpa> findUserJpaByCpf(String cpf, boolean registro);
+    Optional<UserJpa> findUserJpaByEmail(String email);
 
 }

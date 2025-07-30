@@ -18,8 +18,8 @@ import java.util.List;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler
 {
-    @ExceptionHandler(RegisterFailedException.class)
-    private ResponseEntity<AuthInvalid> registerFailedHandler(RegisterFailedException exception)
+    @ExceptionHandler(UserExistsException.class)
+    private ResponseEntity<AuthInvalid> registerFailedHandler(UserExistsException exception)
     {
         AuthInvalid Exception = new AuthInvalid(HttpStatus.BAD_REQUEST,exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Exception);
@@ -32,8 +32,40 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Exception);
     }
 
+    @ExceptionHandler(TransactionNotFoundException.class)
+    private ResponseEntity<AuthInvalid> transactionNotFoundHandler(TransactionNotAllowedException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.NOT_FOUND,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);
+    }
 
+    @ExceptionHandler(SameCPFException.class)
+    private ResponseEntity<AuthInvalid> sameCpfHandler(SameCPFException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.BAD_REQUEST,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Exception);
+    }
 
+    @ExceptionHandler(TransactionNotAllowedException.class)
+    private ResponseEntity<AuthInvalid> transactionNotAllowedHandler(TransactionNotAllowedException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.FORBIDDEN,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Exception);
+    }
+
+    @ExceptionHandler(BalanceInsufficientException.class)
+    private ResponseEntity<AuthInvalid> balanceInsufficientHandler(BalanceInsufficientException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.FORBIDDEN,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Exception);
+    }
+
+    @ExceptionHandler(EmailExistsException.class)
+    private ResponseEntity<AuthInvalid> emailExistsHandler(EmailExistsException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.BAD_REQUEST,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Exception);
+    }
 
 
     @ExceptionHandler(UserNotFoundException.class)
