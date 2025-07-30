@@ -4,6 +4,7 @@ import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
 import br.com.fiap.minibanco.core.user.DTO.UserLoginDTO;
 import br.com.fiap.minibanco.core.user.DTO.UserLoginResponseDTO;
 import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
+import br.com.fiap.minibanco.core.user.DTO.UserResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -38,4 +39,12 @@ public interface UserMapper {
             @Mapping(target = "authorities", ignore = true)
     })
     UserJpa optionalToUser(UserJpa userJpa);
+
+    @Mappings({
+            @Mapping(source = "userJpa.nome_completo", target = "nome"),
+            @Mapping(source = "userJpa.cpf", target = "cpf"),
+            @Mapping(source = "userJpa.tipo", target = "tipoConta"),
+            @Mapping(source = "userJpa.saldo", target = "saldo"),
+    })
+    UserResponseDTO userToUserResponse(UserJpa userJpa);
 }

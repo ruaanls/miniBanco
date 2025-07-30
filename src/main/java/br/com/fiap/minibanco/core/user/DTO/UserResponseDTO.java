@@ -1,7 +1,6 @@
-package br.com.fiap.minibanco.core.user;
+package br.com.fiap.minibanco.core.user.DTO;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import br.com.fiap.minibanco.core.user.TipoConta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,14 +11,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User
+public class UserResponseDTO
 {
-    private String name;
-    private String nomeCompleto;
+    private String nome;
     private String cpf;
-    private String email;
-    @Enumerated(EnumType.STRING)
     private TipoConta tipoConta;
-    private String senha;
     private BigDecimal saldo;
 }

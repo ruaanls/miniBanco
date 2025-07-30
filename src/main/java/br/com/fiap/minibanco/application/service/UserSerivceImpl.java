@@ -5,10 +5,10 @@ import br.com.fiap.minibanco.application.usecases.UserUsecases;
 import br.com.fiap.minibanco.core.user.DTO.UserLoginDTO;
 import br.com.fiap.minibanco.core.user.DTO.UserLoginResponseDTO;
 import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
+import br.com.fiap.minibanco.core.user.DTO.UserResponseDTO;
 import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
 import br.com.fiap.minibanco.utils.mapper.UserMapper;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,4 +49,31 @@ public class UserSerivceImpl implements UserUsecases
         var token = this.tokenService.generateToken(login);
         return this.userMapper.requestToLogin(token);
     }
+
+    @Override
+    public UserJpa findUserJpaByCpf(String cpf) {
+        if(this.userRepositoryPort.findUserJpaByCpf(cpf).isEmpty())
+        {
+            throw new RuntimeException();
+        }
+        else
+        {
+            return this.userRepositoryPort.findUserJpaByCpf(cpf).get();
+        }
+    }
+
+    @Override
+    public UserResponseDTO findUserResponseByCpf(String cpf) {
+        if(this.userRepositoryPort.findUserJpaByCpf(cpf).isEmpty())
+        {
+            throw new RuntimeException();
+        }
+        else
+        {
+            UserResponseDTO userResponse =  this.userMapper.userToUserResponse(this.userRepositoryPort.findUserJpaByCpf(cpf).get());
+            return userResponse;
+        }
+    }
+
+
 }

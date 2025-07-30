@@ -20,6 +20,7 @@ public class UserRegistroDto
     private TipoConta tipoConta;
     private String email;
     private String senha;
-    private BigDecimal saldo;
+
+    private BigDecimal saldo = BigDecimal.ZERO;
 
 }

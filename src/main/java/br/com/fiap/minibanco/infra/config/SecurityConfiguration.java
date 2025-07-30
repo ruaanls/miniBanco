@@ -38,6 +38,7 @@ public class SecurityConfiguration
                         .requestMatchers(HttpMethod.POST, "auth/registro").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "auth/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "auth/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "banco/pix").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 
