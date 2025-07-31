@@ -13,6 +13,7 @@ import br.com.fiap.minibanco.core.transactionals.ports.TransactionRepositoryPort
 import br.com.fiap.minibanco.core.user.TipoConta;
 import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
 import br.com.fiap.minibanco.utils.mapper.TransactionMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ class TransactionServiceImplTest {
     @DisplayName("Realizar transação com sucesso")
     void transferir()
     {
-        // TALVEZ PRECISE DO INSTANT
+
 
         UserJpa envio = new UserJpa("1", "Ruan Lima", "123.456.789-00", TipoConta.COMUM,"ruan@gmail.com","senha123", new java.math.BigDecimal(100) );
         UserJpa recebimento = new UserJpa("2", "João Pedro", "123.456.789-10", TipoConta.COMUM,"joao@gmail.com","senha123", new java.math.BigDecimal(1000) );
@@ -98,4 +99,34 @@ class TransactionServiceImplTest {
         verify(userRepository, times(2)).registrar(any(UserJpa.class));
 
     }
+
+    @Test
+    @DisplayName("Erro de transação por verificacao")
+    void transferirError() throws Exception
+    {
+
+
+        UserJpa envio = new UserJpa("1", "Ruan Lima", "123.456.789-00", TipoConta.COMUM,"ruan@gmail.com","senha123", new java.math.BigDecimal(100) );
+        UserJpa recebimento = new UserJpa("2", "João Pedro", "123.456.789-10", TipoConta.COMUM,"joao@gmail.com","senha123", new java.math.BigDecimal(1000) );
+
+        TransactionJPA transaction = new TransactionJPA(null,new BigDecimal(1000), envio, recebimento);
+        DataUsersTransactionDTO envioData = new DataUsersTransactionDTO(envio.getNome_completo(), envio.getCpf(), envio.getTipo().toString());
+        DataUsersTransactionDTO recebimentoData = new DataUsersTransactionDTO(recebimento.getNome_completo(), recebimento.getCpf(), recebimento.getTipo().toString());
+        TransactionResponseDTO response = new TransactionResponseDTO(transaction.getId(), transaction.getValor(), Instant.now(), envioData, recebimentoData);
+
+
+        when(userSerivceImpl.findUserJpaByCpf("1")).thenReturn(envio);
+        when(userSerivceImpl.findUserJpaByCpf("2")).thenReturn(recebimento);
+        when(verification.verificarTransacao(any())).thenReturn(false);
+
+
+        Exception thrown = Assertions.assertThrows(Exception.class, () -> {
+            TransactionRequestDTO request = new TransactionRequestDTO(new BigDecimal(1000),"1", "2");
+            transactionService.transferir(request);
+        });
+
+        Assertions.assertEquals("Sua transação foi negada por motivos de segurança, tente novamente em alguns minutos", thrown.getMessage());
+
+    }
+
 }
