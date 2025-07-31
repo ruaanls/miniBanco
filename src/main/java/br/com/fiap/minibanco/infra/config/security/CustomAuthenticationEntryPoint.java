@@ -1,4 +1,4 @@
-package br.com.fiap.minibanco.infra.config;
+package br.com.fiap.minibanco.infra.config.security;
 
 import br.com.fiap.minibanco.infra.exception.AuthInvalid;
 import com.auth0.jwt.exceptions.JWTVerificationException;

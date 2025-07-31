@@ -1,5 +1,6 @@
 package br.com.fiap.minibanco.adapters.outbound.JPA.entities;
 
+import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,12 @@ public class TransactionJPA
     private UserJpa usuarioRecebimento;
     private Instant data_hora_transacao;
 
+    public TransactionJPA(Long id ,BigDecimal valor, UserJpa usuarioEnvio, UserJpa usuarioRecebimento)
+    {
+        this.id = id;
+        this.valor = valor;
+        this.data_hora_transacao = Instant.now();
+        this.usuarioEnvio = usuarioEnvio;
+        this.usuarioRecebimento = usuarioRecebimento;
+    }
 }

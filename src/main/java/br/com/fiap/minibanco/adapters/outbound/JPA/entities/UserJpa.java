@@ -1,11 +1,9 @@
 package br.com.fiap.minibanco.adapters.outbound.JPA.entities;
 
+import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
 import br.com.fiap.minibanco.core.user.TipoConta;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class UserJpa implements UserDetails
 {
     @Id
@@ -33,6 +32,17 @@ public class UserJpa implements UserDetails
     private String email;
     private String senha;
     private BigDecimal saldo;
+
+
+    public UserJpa(UserRegistroDto data)
+    {
+        this.nome_completo = data.getNome();
+        this.cpf = data.getCpf();
+        this.tipo = data.getTipoConta();
+        this.email = data.getEmail();
+        this.senha = data.getSenha();
+        this.saldo = data.getSaldo();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,4 +1,4 @@
-package br.com.fiap.minibanco.infra.config;
+package br.com.fiap.minibanco.infra.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

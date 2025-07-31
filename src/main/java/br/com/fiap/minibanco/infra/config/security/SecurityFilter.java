@@ -1,4 +1,4 @@
-package br.com.fiap.minibanco.infra.config;
+package br.com.fiap.minibanco.infra.config.security;
 
 import br.com.fiap.minibanco.adapters.outbound.security.TokenServicePort;
 import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;

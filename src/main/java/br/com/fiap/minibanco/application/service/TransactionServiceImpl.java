@@ -3,11 +3,13 @@ package br.com.fiap.minibanco.application.service;
 import br.com.fiap.minibanco.adapters.outbound.JPA.entities.TransactionJPA;
 import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
 import br.com.fiap.minibanco.application.usecases.TransactionUsecases;
+import br.com.fiap.minibanco.core.transactionals.DTO.AuthTransactionDTO;
 import br.com.fiap.minibanco.core.transactionals.DTO.DataUsersTransactionDTO;
 import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
 import br.com.fiap.minibanco.core.transactionals.DTO.TransactionResponseDTO;
 import br.com.fiap.minibanco.core.transactionals.ports.TransactionRepositoryPort;
 import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
+import br.com.fiap.minibanco.infra.config.restClient.ApiUrls;
 import br.com.fiap.minibanco.infra.exception.*;
 import br.com.fiap.minibanco.utils.mapper.TransactionMapper;
 import jakarta.transaction.Transactional;
@@ -16,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -25,6 +27,7 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class TransactionServiceImpl implements TransactionUsecases
 {
+
     @Autowired
     private final TransactionRepositoryPort transactionRepository;
 
@@ -36,6 +39,10 @@ public class TransactionServiceImpl implements TransactionUsecases
 
     @Autowired
     private final UserRepositoryPort userRepositoryPort;
+
+
+
+
 
     @Override
     @Transactional
@@ -114,7 +121,28 @@ public class TransactionServiceImpl implements TransactionUsecases
         }
         else
         {
-            return true;
+            try{
+                RestClient restClient = RestClient.builder()
+                        .baseUrl(ApiUrls.BASE_URL_AUTH_TRANSACTIONS)
+                        .build();
+                AuthTransactionDTO response = restClient.get()
+                        .uri(ApiUrls.URL_AUTH_TRANSACTIONS)
+                        .retrieve()
+                        .body(AuthTransactionDTO.class);
+                if(response != null && response.getData().isAuthorization())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }catch (Exception e)
+            {
+                return false;
+            }
+
         }
     }
 }
