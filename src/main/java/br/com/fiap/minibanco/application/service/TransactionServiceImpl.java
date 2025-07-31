@@ -40,6 +40,9 @@ public class TransactionServiceImpl implements TransactionUsecases
     @Autowired
     private final UserRepositoryPort userRepositoryPort;
 
+    @Autowired
+    private final VerificationTransactionsImpl verification;
+
 
 
 
@@ -48,15 +51,12 @@ public class TransactionServiceImpl implements TransactionUsecases
     @Transactional
     public TransactionResponseDTO transferir(TransactionRequestDTO transactionRequestDTO) {
         Instant dataHora = Instant.now().truncatedTo(ChronoUnit.MINUTES);
-        if(transactionRequestDTO.getCpfEnvio().equals(transactionRequestDTO.getCpfRecebimento()))
-        {
-            throw new SameCPFException();
-        }
+
         UserJpa userEnvio = userSerivceImpl.findUserJpaByCpf(transactionRequestDTO.getCpfEnvio());
         UserJpa userRecebimento = userSerivceImpl.findUserJpaByCpf(transactionRequestDTO.getCpfRecebimento());
 
-        validarAutorizacaoTransacao(transactionRequestDTO);
-        if(verificarTransacao(transactionRequestDTO) == false)
+        verification.validarAutorizacaoTransacao(transactionRequestDTO);
+        if(verification.verificarTransacao(transactionRequestDTO) == false)
         {
             throw new TransactionNotAllowedException();
         }
@@ -85,64 +85,4 @@ public class TransactionServiceImpl implements TransactionUsecases
 
     }
 
-    private void validarAutorizacaoTransacao(TransactionRequestDTO requestDTO)
-    {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        UserJpa usuarioAutenticado = (UserJpa) authentication.getPrincipal();
-        String cpfUsuario = usuarioAutenticado.getCpf();
-
-        boolean isRementente = cpfUsuario.equals(requestDTO.getCpfEnvio());
-        boolean isDestinatario = cpfUsuario.equals(requestDTO.getCpfRecebimento());
-
-        if(!isRementente && !isDestinatario)
-        {
-            throw new TransactionNotAllowedException("Usuário não autorizado a realizar essa transação, você só pode fazer transações onde você seja o remetente ou destinatário. ");
-        }
-
-        if(!isRementente && isDestinatario)
-        {
-            throw new TransactionNotAllowedException("Você não pode iniciar uma transação como destinatário, apenas o remetente pode iniciar");
-        }
-
-    }
-
-
-    private boolean verificarTransacao(TransactionRequestDTO request) {
-        UserJpa userEnvio = userSerivceImpl.findUserJpaByCpf(request.getCpfEnvio());
-        UserJpa userRecebimento = userSerivceImpl.findUserJpaByCpf(request.getCpfRecebimento());
-        if(userRecebimento.getSaldo() == null || userEnvio.getSaldo() == null)
-        {
-            throw new OracleInputException();
-        }
-        else if(userEnvio.getSaldo().compareTo(request.getValor()) < 0)
-        {
-            throw new BalanceInsufficientException();
-        }
-        else
-        {
-            try{
-                RestClient restClient = RestClient.builder()
-                        .baseUrl(ApiUrls.BASE_URL_AUTH_TRANSACTIONS)
-                        .build();
-                AuthTransactionDTO response = restClient.get()
-                        .uri(ApiUrls.URL_AUTH_TRANSACTIONS)
-                        .retrieve()
-                        .body(AuthTransactionDTO.class);
-                if(response != null && response.getData().isAuthorization())
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            }catch (Exception e)
-            {
-                return false;
-            }
-
-        }
-    }
 }

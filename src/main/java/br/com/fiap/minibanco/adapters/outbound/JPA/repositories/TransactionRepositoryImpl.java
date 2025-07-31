@@ -2,9 +2,7 @@ package br.com.fiap.minibanco.adapters.outbound.JPA.repositories;
 
 import br.com.fiap.minibanco.adapters.outbound.JPA.entities.TransactionJPA;
 import br.com.fiap.minibanco.core.transactionals.ports.TransactionRepositoryPort;
-import br.com.fiap.minibanco.infra.exception.TransactionNotAllowedException;
 import br.com.fiap.minibanco.infra.exception.TransactionNotFoundException;
-import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class TransactioRepositoryImpl implements TransactionRepositoryPort
+public class TransactionRepositoryImpl implements TransactionRepositoryPort
 {
     @Autowired
     private final JpaTransactionRepository repository;
