@@ -15,6 +15,8 @@ import br.com.fiap.minibanco.utils.mapper.TransactionMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -84,5 +86,17 @@ public class TransactionServiceImpl implements TransactionUsecases
         }
 
     }
+
+    @Override
+    public Page<TransactionResponseDTO> extrato(Pageable pageable, String cpf) {
+        Page<TransactionJPA> extrato = this.transactionRepository.findAllTransactionsJpaByCpf(cpf, pageable);
+        return extrato.map(transaction -> {
+            DataUsersTransactionDTO envio = this.transactionMapper.userDtoToDataUsersTransactionDto(transaction.getUsuarioEnvio());
+            DataUsersTransactionDTO recebimento = this.transactionMapper.userDtoToDataUsersTransactionDto(transaction.getUsuarioRecebimento());
+            return this.transactionMapper.transactionToResponse(transaction, envio, recebimento);
+        });
+    }
+
+
 
 }

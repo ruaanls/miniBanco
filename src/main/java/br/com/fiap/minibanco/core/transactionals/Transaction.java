@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,5 +20,5 @@ public class Transaction
     private BigDecimal valor;
     private User usuarioEnvio;
     private User usuarioRecebimento;
-    private Instant dataHora;
+    private LocalDateTime dataHora;
 }

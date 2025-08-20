@@ -2,12 +2,11 @@ package br.com.fiap.minibanco.adapters.outbound.JPA.repositories;
 
 import br.com.fiap.minibanco.adapters.outbound.JPA.entities.TransactionJPA;
 import br.com.fiap.minibanco.core.transactionals.ports.TransactionRepositoryPort;
-import br.com.fiap.minibanco.infra.exception.TransactionNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -22,16 +21,19 @@ public class TransactionRepositoryImpl implements TransactionRepositoryPort
     }
 
     @Override
-    public Optional<TransactionJPA> findTransactionJPAById(Long id) {
-        if(this.repository.findTransactionJPAById(id).isEmpty())
+    public Page<TransactionJPA> findAllTransactionsJpaByCpf(String cpf, Pageable pageable) {
+        Page<TransactionJPA> allTransactions = this.repository.findAllByUsuarioEnvio_Cpf(cpf, pageable);
+        if(allTransactions.getTotalElements() == 0L)
         {
-            throw new TransactionNotFoundException(id);
+            throw new RuntimeException();
         }
         else
         {
-            return this.repository.findTransactionJPAById(id);
+            return allTransactions;
         }
     }
+
+
 
 
 }

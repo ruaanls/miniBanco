@@ -42,4 +42,5 @@ public interface TransactionMapper
     })
 
     TransactionResponseDTO transactionToResponse(TransactionJPA transaction, DataUsersTransactionDTO usuarioEnvio, DataUsersTransactionDTO usuarioRecebimento);
+
 }
