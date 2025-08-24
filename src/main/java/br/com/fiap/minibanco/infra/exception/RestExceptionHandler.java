@@ -67,6 +67,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Exception);
     }
 
+    @ExceptionHandler(HavenotTransationsExceptions.class)
+    private ResponseEntity<AuthInvalid>HaveNotTransationsHandler(HavenotTransationsExceptions exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.NOT_FOUND,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);
+    }
+
 
     @ExceptionHandler(UserNotFoundException.class)
     private ResponseEntity<AuthInvalid> userNotFoundHandler(UserNotFoundException exception)
