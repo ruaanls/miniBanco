@@ -19,7 +19,8 @@ public interface UserMapper {
             @Mapping(source = "registerDTO.tipoConta", target = "tipo"),
             @Mapping(source = "registerDTO.email", target = "email"),
             @Mapping(source = "passwordEncrypted", target = "senha"),
-            @Mapping(source = "registerDTO.saldo", target = "saldo")
+            @Mapping(source = "registerDTO.saldo", target = "saldo"),
+            @Mapping(target = "authorities", ignore = true)
     })
     UserJpa requestToUser(UserRegistroDto registerDTO, String passwordEncrypted);
 
@@ -47,4 +48,8 @@ public interface UserMapper {
             @Mapping(source = "userJpa.saldo", target = "saldo"),
     })
     UserResponseDTO userToUserResponse(UserJpa userJpa);
+
+
+
+
 }

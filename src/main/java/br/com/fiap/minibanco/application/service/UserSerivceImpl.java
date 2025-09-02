@@ -18,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 
 @Service
@@ -80,6 +82,37 @@ public class UserSerivceImpl implements UserUsecases
             UserResponseDTO userResponse =  this.userMapper.userToUserResponse(this.userRepositoryPort.findUserJpaByCpf(cpf, false).get());
             return userResponse;
         }
+    }
+
+    @Override
+    public void deleteUser(String cpf) {
+        this.userRepositoryPort.deleteUserJpaByCpf(cpf);
+    }
+
+    @Override
+    public UserResponseDTO updateUser(UserRegistroDto registroDto, String cpf) {
+        Optional<UserJpa> userVelho = this.userRepositoryPort.findUserJpaByCpf(cpf, false);
+        if(userVelho.isPresent())
+        {
+            String idAntigo = userVelho.get().getId();
+            userVelho.get().setId(idAntigo);
+            userVelho.get().setCpf(registroDto.getCpf());
+            userVelho.get().setEmail(registroDto.getEmail());
+            String senhaCriptografada = new BCryptPasswordEncoder().encode(registroDto.getSenha());
+            userVelho.get().setSenha(senhaCriptografada);
+            userVelho.get().setSaldo(registroDto.getSaldo());
+            userVelho.get().setTipo(registroDto.getTipoConta());
+            userVelho.get().setNome_completo(registroDto.getNome());
+
+            UserJpa userJpa =  this.userRepositoryPort.updateUserJpa(userVelho.get());
+            UserResponseDTO userResponse = this.userMapper.userToUserResponse(userJpa);
+            return userResponse;
+        }
+        else
+        {
+            throw new UserNotFoundException();
+        }
+
     }
 
 

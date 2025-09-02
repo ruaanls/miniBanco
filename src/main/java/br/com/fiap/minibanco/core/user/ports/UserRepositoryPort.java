@@ -11,5 +11,7 @@ public interface UserRepositoryPort
     UserDetails findByCpf(String cpf);
     Optional<UserJpa> findUserJpaByCpf(String cpf, boolean registro);
     Optional<UserJpa> findUserJpaByEmail(String email);
+    void deleteUserJpaByCpf(String cpf);
+    UserJpa updateUserJpa(UserJpa userJpa);
 
 }

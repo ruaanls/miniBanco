@@ -4,6 +4,7 @@ import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
 import br.com.fiap.minibanco.core.user.TipoConta;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 
+@DynamicUpdate
 public class UserJpa implements UserDetails
 {
     @Id

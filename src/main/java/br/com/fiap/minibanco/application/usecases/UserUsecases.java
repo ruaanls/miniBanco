@@ -12,4 +12,7 @@ public interface UserUsecases
     UserLoginResponseDTO login(UserLoginDTO userLoginDTO);
     UserJpa findUserJpaByCpf(String cpf);
     UserResponseDTO findUserResponseByCpf(String cpf);
+    void deleteUser(String cpf);
+    UserResponseDTO updateUser(UserRegistroDto userRegistroDto, String cpf);
+
 }

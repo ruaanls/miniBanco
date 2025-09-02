@@ -3,6 +3,7 @@ package br.com.fiap.minibanco.adapters.outbound.JPA.repositories;
 import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
 import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
 import br.com.fiap.minibanco.infra.exception.EmailExistsException;
+import br.com.fiap.minibanco.infra.exception.UserExistsException;
 import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,30 @@ public class UserRepositoryImpl implements UserRepositoryPort
         {
             throw new EmailExistsException(email);
         }
+    }
+
+    @Override
+    public void deleteUserJpaByCpf(String cpf) {
+        if(this.findUserJpaByCpf(cpf, false).isEmpty())
+        {
+            throw new UserNotFoundException();
+        }
+        else
+        {
+            this.jpaUserRepository.deleteUserJpaByCpf(cpf);
+        }
+    }
+
+    @Override
+    public UserJpa updateUserJpa(UserJpa userJpa) {
+        if(userJpa.getCpf().isEmpty())
+        {
+            throw new UserNotFoundException();
+        }
+        else
+        {
+            return this.jpaUserRepository.save(userJpa);
+        }
+
     }
 }

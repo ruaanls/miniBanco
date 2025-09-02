@@ -3,6 +3,7 @@ package br.com.fiap.minibanco.adapters.inbound.controller;
 import br.com.fiap.minibanco.application.usecases.UserUsecases;
 import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
 import br.com.fiap.minibanco.core.transactionals.DTO.TransactionResponseDTO;
+import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
 import br.com.fiap.minibanco.core.user.DTO.UserResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +24,19 @@ public class UserController
         UserResponseDTO response = userService.findUserResponseByCpf(cpf);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity delete (@PathVariable String cpf)
+    {
+        this.userService.deleteUser(cpf);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{cpf}")
+    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserRegistroDto userRegistroDto, @PathVariable String cpf )
+    {
+        UserResponseDTO responseDTO = this.userService.updateUser(userRegistroDto,cpf);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
 }
