@@ -311,8 +311,16 @@ DB_URL=jdbc:sqlserver://sqlserver-meuservidor.database.windows.net:1433;database
       "id": 1,
       "valor": 50.00,
       "dataHora": "2024-06-01T12:00:00Z",
-      "usuarioEnvio": { ... },
-      "usuarioRecebimento": { ... }
+      "usuarioEnvio": {
+        "nomeCompleto": "João Silva",
+        "cpf": "123.456.789-00",
+        "tipo": "COMUM"
+      },
+      "usuarioRecebimento": {
+        "nomeCompleto": "Maria Souza",
+        "cpf": "987.654.321-00",
+        "tipo": "LOJISTA"
+      }
     }
   ],
   "totalPages": 1,
