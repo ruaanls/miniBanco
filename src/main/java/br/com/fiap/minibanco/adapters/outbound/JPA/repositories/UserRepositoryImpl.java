@@ -5,6 +5,8 @@ import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
 import br.com.fiap.minibanco.infra.exception.EmailExistsException;
 import br.com.fiap.minibanco.infra.exception.UserExistsException;
 import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,10 @@ public class UserRepositoryImpl implements UserRepositoryPort
 {
     @Autowired
     private final JpaUserRepository jpaUserRepository;
+
+    @Autowired
+    private EntityManager entityManager;
+
 
     @Override
     public void registrar(UserJpa userJpa)
@@ -76,6 +82,7 @@ public class UserRepositoryImpl implements UserRepositoryPort
     }
 
     @Override
+
     public void deleteUserJpaByCpf(String cpf) {
         if(this.findUserJpaByCpf(cpf, false).isEmpty())
         {
@@ -84,6 +91,9 @@ public class UserRepositoryImpl implements UserRepositoryPort
         else
         {
             this.jpaUserRepository.deleteUserJpaByCpf(cpf);
+            //entityManager.flush();
+            //entityManager.clear();
+
         }
     }
 

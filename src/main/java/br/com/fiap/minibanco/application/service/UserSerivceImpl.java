@@ -11,6 +11,7 @@ import br.com.fiap.minibanco.infra.exception.EmailExistsException;
 import br.com.fiap.minibanco.infra.exception.UserExistsException;
 import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
 import br.com.fiap.minibanco.utils.mapper.UserMapper;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -85,6 +86,7 @@ public class UserSerivceImpl implements UserUsecases
     }
 
     @Override
+    @Transactional
     public void deleteUser(String cpf) {
         this.userRepositoryPort.deleteUserJpaByCpf(cpf);
     }
@@ -100,7 +102,6 @@ public class UserSerivceImpl implements UserUsecases
             userVelho.get().setEmail(registroDto.getEmail());
             String senhaCriptografada = new BCryptPasswordEncoder().encode(registroDto.getSenha());
             userVelho.get().setSenha(senhaCriptografada);
-            userVelho.get().setSaldo(registroDto.getSaldo());
             userVelho.get().setTipo(registroDto.getTipoConta());
             userVelho.get().setNome_completo(registroDto.getNome());
 

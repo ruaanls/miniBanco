@@ -36,8 +36,8 @@ public class SecurityConfiguration
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "auth/registro").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "auth/*").hasRole("ADMIM")
-                        .requestMatchers(HttpMethod.PUT, "auth/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "users/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "users/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "banco/pix").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
