@@ -220,6 +220,14 @@ DB_URL=jdbc:sqlserver://sqlserver-meuservidor.database.windows.net:1433;database
     }
     ```
   - Erro de validação: (igual ao registro)
+  - Ação não permitida:
+    - **HTTP 403 FORBIDDEN**
+    ```json
+    {
+      "status": "FORBIDDEN",
+      "message": "Você não pode realizar ações em contas que não sejam a sua, por favor realize ações de contas que tenham o mesmo cpf do seu login"
+    }
+    ```
 
 ### 5. Excluir Usuário
 - **Rota:** `DELETE /users/{cpf}`
@@ -233,6 +241,14 @@ DB_URL=jdbc:sqlserver://sqlserver-meuservidor.database.windows.net:1433;database
     {
       "status": "NOT_FOUND",
       "message": "O cpf: 123.456.789-00 não existe, por favor informe um cpf válido! "
+    }
+    ```
+  - Ação não permitida:
+    - **HTTP 403 FORBIDDEN**
+    ```json
+    {
+      "status": "FORBIDDEN",
+      "message": "Você não pode realizar ações em contas que não sejam a sua, por favor realize ações de contas que tenham o mesmo cpf do seu login"
     }
     ```
 
@@ -364,5 +380,5 @@ A exceção `OracleInputException` pode ocorrer em qualquer endpoint da API, ind
 
 ---
 
-## Licença
-Este projeto é apenas para fins educacionais.
+## Autoria
+Projeto realizado por Ruan Lima Silva.

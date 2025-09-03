@@ -127,7 +127,7 @@ public class UserSerivceImpl implements UserUsecases
 
 
 
-    public void validarAlteracao( String cpf)
+    private void validarAlteracao( String cpf)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

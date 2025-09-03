@@ -91,8 +91,8 @@ public class UserRepositoryImpl implements UserRepositoryPort
         else
         {
             this.jpaUserRepository.deleteUserJpaByCpf(cpf);
-            //entityManager.flush();
-            //entityManager.clear();
+            entityManager.flush();
+            entityManager.clear();
 
         }
     }
