@@ -2,12 +2,14 @@ package br.com.fiap.minibanco.application.service;
 import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
 import br.com.fiap.minibanco.adapters.outbound.security.TokenServicePort;
 import br.com.fiap.minibanco.application.usecases.UserUsecases;
+import br.com.fiap.minibanco.application.usecases.VerificationTransactionUsecases;
 import br.com.fiap.minibanco.core.user.DTO.UserLoginDTO;
 import br.com.fiap.minibanco.core.user.DTO.UserLoginResponseDTO;
 import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
 import br.com.fiap.minibanco.core.user.DTO.UserResponseDTO;
 import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
 import br.com.fiap.minibanco.infra.exception.EmailExistsException;
+import br.com.fiap.minibanco.infra.exception.TransactionNotAllowedException;
 import br.com.fiap.minibanco.infra.exception.UserExistsException;
 import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
 import br.com.fiap.minibanco.utils.mapper.UserMapper;
@@ -16,6 +18,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,8 @@ public class UserSerivceImpl implements UserUsecases
 {
     @Autowired
     private final UserRepositoryPort userRepositoryPort;
+
+
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -88,11 +94,14 @@ public class UserSerivceImpl implements UserUsecases
     @Override
     @Transactional
     public void deleteUser(String cpf) {
+        validarAlteracao(cpf);
         this.userRepositoryPort.deleteUserJpaByCpf(cpf);
     }
 
     @Override
     public UserResponseDTO updateUser(UserRegistroDto registroDto, String cpf) {
+
+        validarAlteracao( cpf);
         Optional<UserJpa> userVelho = this.userRepositoryPort.findUserJpaByCpf(cpf, false);
         if(userVelho.isPresent())
         {
@@ -112,6 +121,23 @@ public class UserSerivceImpl implements UserUsecases
         else
         {
             throw new UserNotFoundException();
+        }
+
+    }
+
+
+
+    public void validarAlteracao( String cpf)
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        UserJpa usuarioAutenticado = (UserJpa) authentication.getPrincipal();
+        String cpfToken = usuarioAutenticado.getCpf();
+
+
+        if(!cpfToken.equals(cpf))
+        {
+            throw new TransactionNotAllowedException("Você não pode realizar ações em contas que não sejam a sua, por favor realize ações de contas que tenham o mesmo cpf do seu login");
         }
 
     }
