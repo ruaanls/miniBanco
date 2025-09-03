@@ -86,6 +86,7 @@ public class UserSerivceImpl implements UserUsecases
         }
         else
         {
+            validarAlteracao(cpf);
             UserResponseDTO userResponse =  this.userMapper.userToUserResponse(this.userRepositoryPort.findUserJpaByCpf(cpf, false).get());
             return userResponse;
         }
@@ -127,7 +128,7 @@ public class UserSerivceImpl implements UserUsecases
 
 
 
-    private void validarAlteracao( String cpf)
+    public void validarAlteracao( String cpf)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -137,7 +138,7 @@ public class UserSerivceImpl implements UserUsecases
 
         if(!cpfToken.equals(cpf))
         {
-            throw new TransactionNotAllowedException("Você não pode realizar ações em contas que não sejam a sua, por favor realize ações de contas que tenham o mesmo cpf do seu login");
+            throw new TransactionNotAllowedException("Você não pode realizar ações em contas que não sejam a sua, por favor realize ações em contas que tenham o mesmo cpf do seu login");
         }
 
     }

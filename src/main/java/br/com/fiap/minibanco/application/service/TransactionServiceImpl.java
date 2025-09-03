@@ -89,6 +89,7 @@ public class TransactionServiceImpl implements TransactionUsecases
 
     @Override
     public Page<TransactionResponseDTO> extrato(Pageable pageable, String cpf) {
+        this.userSerivceImpl.validarAlteracao(cpf);
         Page<TransactionJPA> extrato = this.transactionRepository.findAllTransactionsJpaByCpf(cpf, pageable);
         return extrato.map(transaction -> {
             DataUsersTransactionDTO envio = this.transactionMapper.userDtoToDataUsersTransactionDto(transaction.getUsuarioEnvio());
