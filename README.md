@@ -7,14 +7,18 @@ A API realiza conexão com um banco de dados **SQL Server** hospedado em nuvem n
 
 A autenticação é feita via JWT, protegendo todas as rotas exceto registro e login.
 
+**🚀 A aplicação está disponível em produção na nuvem através da plataforma Render, permitindo acesso público aos endpoints da API.**
+
 ---
 
 ## Endpoint Base
 A aplicação estará disponível em:
 
 ```
-http://localhost:8080
+https://minibanco.onrender.com
 ```
+
+**Nota:** Para desenvolvimento local, a aplicação estará disponível em `http://localhost:8080`.
 
 ---
 
