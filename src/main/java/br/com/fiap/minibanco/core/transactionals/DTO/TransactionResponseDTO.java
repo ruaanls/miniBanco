@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,7 +19,7 @@ public class TransactionResponseDTO
 {
     private Long id;
     private BigDecimal valor;
-    private Instant dataHora;
+    private LocalDateTime dataHora;
     private DataUsersTransactionDTO usuarioEnvio;
     private DataUsersTransactionDTO usuarioRecebimento;
 }

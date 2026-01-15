@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @AllArgsConstructor
@@ -52,7 +53,7 @@ public class TransactionServiceImpl implements TransactionUsecases
     @Override
     @Transactional
     public TransactionResponseDTO transferir(TransactionRequestDTO transactionRequestDTO) {
-        Instant dataHora = Instant.now().truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime dataHora = LocalDateTime.now();
 
         UserJpa userEnvio = userSerivceImpl.findUserJpaByCpf(transactionRequestDTO.getCpfEnvio());
         UserJpa userRecebimento = userSerivceImpl.findUserJpaByCpf(transactionRequestDTO.getCpfRecebimento());

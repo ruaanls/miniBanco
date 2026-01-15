@@ -1,12 +1,17 @@
 spring:
+  application:
+    name: miniBanco
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@${DB_TNS_NAME}
-    username: ${DB_USERNAME}
+    url: jdbc:oracle:thin:@d3m0ymzytp42zc67_tp
+    username: ADMIN
     password: ${DB_PASSWORD}
+
 
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: true
-    database-platform: org.hibernate.dialect.OracleDialect
+    properties:
+      hibernate:
+        format_sql: true

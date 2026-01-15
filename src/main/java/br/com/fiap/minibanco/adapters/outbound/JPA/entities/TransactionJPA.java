@@ -9,9 +9,10 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "transaction_jpa")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,7 +20,8 @@ import java.time.Instant;
 public class TransactionJPA
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
+    @SequenceGenerator(name = "transaction_seq", sequenceName = "TRANSACTION_JPA_SEQ", allocationSize = 1)
     private Long id;
     private BigDecimal valor;
     @ManyToOne
@@ -28,13 +30,14 @@ public class TransactionJPA
     @ManyToOne
     @JoinColumn(name = "id_recebedor")
     private UserJpa usuarioRecebimento;
-    private Instant data_hora_transacao;
+    @Column(name = "data_hora_transacao", columnDefinition = "TIMESTAMP")
+    private LocalDateTime data_hora_transacao;
 
     public TransactionJPA(Long id ,BigDecimal valor, UserJpa usuarioEnvio, UserJpa usuarioRecebimento)
     {
         this.id = id;
         this.valor = valor;
-        this.data_hora_transacao = Instant.now();
+        this.data_hora_transacao = LocalDateTime.now();
         this.usuarioEnvio = usuarioEnvio;
         this.usuarioRecebimento = usuarioRecebimento;
     }

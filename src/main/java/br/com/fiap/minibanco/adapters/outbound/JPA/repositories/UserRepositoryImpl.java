@@ -7,22 +7,18 @@ import br.com.fiap.minibanco.infra.exception.UserExistsException;
 import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-@AllArgsConstructor
 
+@RequiredArgsConstructor
 @Service
 public class UserRepositoryImpl implements UserRepositoryPort
 {
-    @Autowired
     private final JpaUserRepository jpaUserRepository;
-
-    @Autowired
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
 
     @Override

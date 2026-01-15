@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")
 public interface TransactionMapper
@@ -22,7 +23,7 @@ public interface TransactionMapper
             @Mapping(source = "usuarioRecebimento", target = "usuarioRecebimento"),
             @Mapping(source = "dataHora", target = "data_hora_transacao"),
     })
-    TransactionJPA requestToTransaction(TransactionRequestDTO transaction, UserJpa usuarioEnvio, UserJpa usuarioRecebimento, Instant dataHora);
+    TransactionJPA requestToTransaction(TransactionRequestDTO transaction, UserJpa usuarioEnvio, UserJpa usuarioRecebimento, LocalDateTime dataHora);
 
     @Mappings({
 
