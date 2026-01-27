@@ -14,8 +14,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure OCI CLI and kubectl for OKE
-        uses: oracle-actions/configure-kubectl-oke@v1.5.0
+      - name: Setup OCI CLI and Configure kubectl MANUALLY
+        run: |
+          # 1. Instala OCI CLI
+          bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)" -- --accept-all-defaults
+          export PATH="$HOME/bin:$PATH"
+
+          # 2. Cria a chave privada a partir do secret
+          mkdir -p ~/.oci
+          echo "${{ secrets.OCI_CLI_KEY_CONTENT }}" > ~/.oci/key.pem
+          chmod 600 ~/.oci/key.pem
+
+          # 3. Cria o arquivo de configuração OCI
+          cat > ~/.oci/config << EOF
+          [DEFAULT]
+          user=${{ secrets.OCI_CLI_USER }}
+          fingerprint=${{ secrets.OCI_CLI_FINGERPRINT }}
+          tenancy=${{ secrets.OCI_CLI_TENANCY }}
+          region=${{ secrets.OCI_CLI_REGION }}
+          key_file=~/.oci/key.pem
+          EOF
+
+          # 4. Gera o arquivo kubeconfig para o cluster
+          #    ATENÇÃO: Use '--token-version 2.0.0' e '--auth instance_principal' se aplicável
+          $HOME/bin/oci ce cluster create-kubeconfig \
+            --cluster-id ${{ secrets.OKE_CLUSTER_OCID }} \
+            --file $HOME/.kube/config \
+            --region ${{ secrets.OCI_CLI_REGION }} \
+            --token-version 2.0.0
+
+          # 5. Testa a conexão
+          kubectl get nodes
         with:
           cluster-id: ${{ secrets.OKE_CLUSTER_OCID }}
         env:
