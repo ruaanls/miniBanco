@@ -1,0 +1,66 @@
+name: Deploy to OKE
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Permite rodar manualmente
+
+jobs:
+  deploy-hk:
+    runs-on: ubuntu-latest
+    environment: hk  # Usa os secrets específicos do ambiente 'hk'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure OCI CLI and kubectl for OKE
+        uses: oracle-actions/configure-kubectl-oke@v1
+        with:
+          cluster-id: ${{ secrets.OKE_CLUSTER_OCID }}
+        env:
+          OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+          OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+          OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+
+      - name: Login to OCIR
+        run: |
+          echo "${{ secrets.OCIR_PASSWORD_HK }}" | docker login ${{ secrets.OCIR_REGISTRY }} -u "${{ secrets.OCIR_USERNAME }}" --password-stdin
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.OCIR_REGISTRY }}/grwmqw3g1ezq/minibanco-oracle:latest .
+          docker push ${{ secrets.OCIR_REGISTRY }}/grwmqw3g1ezq/minibanco-oracle:latest
+
+      - name: Deploy ALL manifests to HK namespace
+        run: |
+          kubectl apply -f k8s/hk/
+          kubectl rollout status deployment/java-app -n hk
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    environment: prod  # Usa os secrets específicos do ambiente 'prod'
+    needs: deploy-hk   # Só roda depois que HK terminar
+    if: github.event_name == 'workflow_dispatch'  # SOMENTE MANUAL
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure OCI CLI and kubectl for OKE
+        uses: oracle-actions/configure-kubectl-oke@v1
+        with:
+          cluster-id: ${{ secrets.OKE_CLUSTER_OCID }}
+        env:
+          OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+          OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+          OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+
+      - name: Deploy ALL manifests to PROD namespace
+        run: |
+          kubectl apply -f k8s/prod/
+          kubectl rollout status deployment/java-app -n prod
