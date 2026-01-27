@@ -358,7 +358,6 @@ DB_URL=jdbc:sqlserver://sqlserver-meuservidor.database.windows.net:1433;database
     }
     ```
   - Usuário não encontrado: (igual ao consultar saldo)
-
 ---
 
 ## Exceção OracleInputException (Erro Genérico)
