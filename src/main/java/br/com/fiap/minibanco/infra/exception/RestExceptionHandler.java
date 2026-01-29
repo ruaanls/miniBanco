@@ -33,7 +33,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(TransactionNotFoundException.class)
-    private ResponseEntity<AuthInvalid> transactionNotFoundHandler(TransactionNotAllowedException exception)
+    private ResponseEntity<AuthInvalid> transactionNotFoundHandler(TransactionNotFoundException exception)
     {
         AuthInvalid Exception = new AuthInvalid(HttpStatus.NOT_FOUND,exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);

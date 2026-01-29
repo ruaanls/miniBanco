@@ -81,7 +81,7 @@ public class TransactionServiceImpl implements TransactionUsecases
             catch (Exception e)
             {
 
-                throw new OracleInputException();
+                throw new OracleInputException(e);
             }
 
         }
