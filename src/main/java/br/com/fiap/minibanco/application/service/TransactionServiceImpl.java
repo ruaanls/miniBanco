@@ -8,7 +8,9 @@ import br.com.fiap.minibanco.application.DTO.TransactionRequestDTO;
 import br.com.fiap.minibanco.application.DTO.TransactionResponseDTO;
 import br.com.fiap.minibanco.domain.ports.outbound.TransactionRepositoryPort;
 import br.com.fiap.minibanco.domain.ports.outbound.UserRepositoryPort;
-import br.com.fiap.minibanco.infra.exception.*;
+import br.com.fiap.minibanco.domain.service.TransactionDomainService;
+import br.com.fiap.minibanco.infra.exception.OracleInputException;
+import br.com.fiap.minibanco.infra.exception.TransactionNotAllowedException;
 import br.com.fiap.minibanco.utils.mapper.TransactionMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -39,46 +41,39 @@ public class TransactionServiceImpl implements TransactionUsecases
     @Autowired
     private final VerificationTransactionsImpl verification;
 
-
-
-
+    @Autowired
+    private final TransactionDomainService transactionDomainService;
 
     @Override
     @Transactional
     public TransactionResponseDTO transferir(TransactionRequestDTO transactionRequestDTO) {
         LocalDateTime dataHora = LocalDateTime.now();
-
         UserJpa userEnvio = userSerivceImpl.findUserJpaByCpf(transactionRequestDTO.getCpfEnvio());
         UserJpa userRecebimento = userSerivceImpl.findUserJpaByCpf(transactionRequestDTO.getCpfRecebimento());
 
         verification.validarAutorizacaoTransacao(transactionRequestDTO);
-        if(verification.verificarTransacao(transactionRequestDTO) == false)
-        {
+        if (!verification.verificarTransacao(transactionRequestDTO)) {
             throw new TransactionNotAllowedException();
         }
 
-        else
-        {
-            userEnvio.setSaldo(userEnvio.getSaldo().subtract(transactionRequestDTO.getValor()));
-            userRecebimento.setSaldo(userRecebimento.getSaldo().add(transactionRequestDTO.getValor()));
-            TransactionJPA transaction =  this.transactionMapper.requestToTransaction(transactionRequestDTO,userEnvio, userRecebimento, dataHora);
-            try
-            {
-                this.userRepositoryPort.registrar(userEnvio);
-                this.userRepositoryPort.registrar(userRecebimento);
-                TransactionJPA transactionJPA = transactionRepository.transferir(transaction);
-                DataUsersTransactionDTO envio = this.transactionMapper.userDtoToDataUsersTransactionDto(userEnvio);
-                DataUsersTransactionDTO recebimento = this.transactionMapper.userDtoToDataUsersTransactionDto(userRecebimento);
-                return this.transactionMapper.transactionToResponse(transactionJPA, envio, recebimento);
-            }
-            catch (Exception e)
-            {
+        var saldos = transactionDomainService.aplicarTransferencia(
+                userEnvio.getSaldo(),
+                userRecebimento.getSaldo(),
+                transactionRequestDTO.getValor());
+        userEnvio.setSaldo(saldos.novoSaldoRemetente());
+        userRecebimento.setSaldo(saldos.novoSaldoDestinatario());
 
-                throw new OracleInputException(e);
-            }
-
+        TransactionJPA transaction = this.transactionMapper.requestToTransaction(transactionRequestDTO, userEnvio, userRecebimento, dataHora);
+        try {
+            this.userRepositoryPort.registrar(userEnvio);
+            this.userRepositoryPort.registrar(userRecebimento);
+            TransactionJPA transactionJPA = transactionRepository.transferir(transaction);
+            DataUsersTransactionDTO envio = this.transactionMapper.userDtoToDataUsersTransactionDto(userEnvio);
+            DataUsersTransactionDTO recebimento = this.transactionMapper.userDtoToDataUsersTransactionDto(userRecebimento);
+            return this.transactionMapper.transactionToResponse(transactionJPA, envio, recebimento);
+        } catch (Exception e) {
+            throw new OracleInputException(e);
         }
-
     }
 
     @Override

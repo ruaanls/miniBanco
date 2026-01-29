@@ -7,8 +7,8 @@ import br.com.fiap.minibanco.application.DTO.UserLoginResponseDTO;
 import br.com.fiap.minibanco.application.DTO.UserRegistroDto;
 import br.com.fiap.minibanco.application.DTO.UserResponseDTO;
 import br.com.fiap.minibanco.domain.ports.outbound.UserRepositoryPort;
+import br.com.fiap.minibanco.domain.service.UserAuthorizationDomainService;
 import br.com.fiap.minibanco.infra.exception.EmailExistsException;
-import br.com.fiap.minibanco.infra.exception.TransactionNotAllowedException;
 import br.com.fiap.minibanco.infra.exception.UserExistsException;
 import br.com.fiap.minibanco.infra.exception.UserNotFoundException;
 import br.com.fiap.minibanco.utils.mapper.UserMapper;
@@ -40,6 +40,9 @@ public class UserSerivceImpl implements UserUsecases
 
     @Autowired
     private TokenServicePort tokenService;
+
+    @Autowired
+    private UserAuthorizationDomainService userAuthorizationDomainService;
 
     @Override
     public void registrar(UserRegistroDto registroDto) {
@@ -85,7 +88,7 @@ public class UserSerivceImpl implements UserUsecases
         }
         else
         {
-            validarAlteracao(cpf);
+            userAuthorizationDomainService.validarAlteracaoPropriaConta(getCpfUsuarioAutenticado(), cpf);
             UserResponseDTO userResponse =  this.userMapper.userToUserResponse(this.userRepositoryPort.findUserJpaByCpf(cpf, false).get());
             return userResponse;
         }
@@ -94,14 +97,13 @@ public class UserSerivceImpl implements UserUsecases
     @Override
     @Transactional
     public void deleteUser(String cpf) {
-        validarAlteracao(cpf);
+        userAuthorizationDomainService.validarAlteracaoPropriaConta(getCpfUsuarioAutenticado(), cpf);
         this.userRepositoryPort.deleteUserJpaByCpf(cpf);
     }
 
     @Override
     public UserResponseDTO updateUser(UserRegistroDto registroDto, String cpf) {
-
-        validarAlteracao( cpf);
+        userAuthorizationDomainService.validarAlteracaoPropriaConta(getCpfUsuarioAutenticado(), cpf);
         Optional<UserJpa> userVelho = this.userRepositoryPort.findUserJpaByCpf(cpf, false);
         if(userVelho.isPresent())
         {
@@ -127,20 +129,15 @@ public class UserSerivceImpl implements UserUsecases
 
 
 
-    public void validarAlteracao( String cpf)
-    {
+
+    private String getCpfUsuarioAutenticado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         UserJpa usuarioAutenticado = (UserJpa) authentication.getPrincipal();
-        String cpfToken = usuarioAutenticado.getCpf();
-
-
-        if(!cpfToken.equals(cpf))
-        {
-            throw new TransactionNotAllowedException("Você não pode realizar ações em contas que não sejam a sua, por favor realize ações em contas que tenham o mesmo cpf do seu login");
-        }
-
+        return usuarioAutenticado.getCpf();
     }
 
 
+    public void validarAlteracao(String cpf) {
+        userAuthorizationDomainService.validarAlteracaoPropriaConta(getCpfUsuarioAutenticado(), cpf);
+    }
 }
