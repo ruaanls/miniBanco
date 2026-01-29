@@ -49,7 +49,7 @@ public class OpenApiConfig {
                                 .url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
                         new Server()
-                                .url("https://minibanco.onrender.com")
+                                .url("https://minibanco-1.onrender.com")
                                 .description("Servidor de Produção (Render)"),
                         new Server()
                                 .url("http://localhost:8080")

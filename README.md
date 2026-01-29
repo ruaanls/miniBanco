@@ -20,9 +20,9 @@ A autenticação é feita via **JWT**, protegendo todas as rotas exceto registro
 ## Endpoint Base em Produção
 Quando publicada na Render, a aplicação fica disponível em:
 
-```
-https://minibanco.onrender.com
-```
+**API:** [https://minibanco-1.onrender.com](https://minibanco-1.onrender.com)
+
+**Documentação (Swagger UI):** [https://minibanco-1.onrender.com/swagger-ui/index.html](https://minibanco-1.onrender.com/swagger-ui/index.html)
 
 **Ambiente local:** para desenvolvimento, a API roda em `http://localhost:8080`.
 
@@ -34,10 +34,7 @@ A API possui documentação interativa completa através do **Swagger UI**, faci
 
 ### Acessar a Documentação
 
-**Produção (Render):**
-```
-https://minibanco.onrender.com/swagger-ui.html
-```
+**Produção (Render):** [Swagger UI](https://minibanco-1.onrender.com/swagger-ui/index.html)
 
 **Local (Desenvolvimento):**
 ```
