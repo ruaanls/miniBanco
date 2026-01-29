@@ -1,17 +1,13 @@
 package br.com.fiap.minibanco.application.service;
 
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.TransactionJPA;
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
-import br.com.fiap.minibanco.adapters.outbound.JPA.repositories.JpaTransactionRepository;
-import br.com.fiap.minibanco.adapters.outbound.JPA.repositories.JpaUserRepository;
-import br.com.fiap.minibanco.adapters.outbound.JPA.repositories.TransactionRepositoryImpl;
-import br.com.fiap.minibanco.adapters.outbound.JPA.repositories.UserRepositoryImpl;
-import br.com.fiap.minibanco.core.transactionals.DTO.DataUsersTransactionDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionResponseDTO;
-import br.com.fiap.minibanco.core.transactionals.ports.TransactionRepositoryPort;
-import br.com.fiap.minibanco.core.user.TipoConta;
-import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.TransactionJPA;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.UserJpa;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.repositories.TransactionRepositoryImpl;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.repositories.UserRepositoryImpl;
+import br.com.fiap.minibanco.application.DTO.DataUsersTransactionDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionRequestDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionResponseDTO;
+import br.com.fiap.minibanco.domain.model.TipoConta;
 import br.com.fiap.minibanco.utils.mapper.TransactionMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

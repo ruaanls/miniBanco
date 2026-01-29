@@ -1,15 +1,13 @@
 package br.com.fiap.minibanco.application.service;
 
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.TransactionJPA;
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.TransactionJPA;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.UserJpa;
 import br.com.fiap.minibanco.application.usecases.TransactionUsecases;
-import br.com.fiap.minibanco.core.transactionals.DTO.AuthTransactionDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.DataUsersTransactionDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionResponseDTO;
-import br.com.fiap.minibanco.core.transactionals.ports.TransactionRepositoryPort;
-import br.com.fiap.minibanco.core.user.ports.UserRepositoryPort;
-import br.com.fiap.minibanco.infra.config.restClient.ApiUrls;
+import br.com.fiap.minibanco.application.DTO.DataUsersTransactionDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionRequestDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionResponseDTO;
+import br.com.fiap.minibanco.domain.ports.outbound.TransactionRepositoryPort;
+import br.com.fiap.minibanco.domain.ports.outbound.UserRepositoryPort;
 import br.com.fiap.minibanco.infra.exception.*;
 import br.com.fiap.minibanco.utils.mapper.TransactionMapper;
 import jakarta.transaction.Transactional;
@@ -17,14 +15,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @AllArgsConstructor
 @Service

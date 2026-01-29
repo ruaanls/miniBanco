@@ -1,10 +1,9 @@
 package br.com.fiap.minibanco.adapters.outbound.JPA.repositories;
 
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.TransactionJPA;
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
-import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
-import br.com.fiap.minibanco.core.user.TipoConta;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.TransactionJPA;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.UserJpa;
+import br.com.fiap.minibanco.domain.model.TipoConta;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.repositories.JpaTransactionRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

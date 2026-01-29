@@ -1,11 +1,10 @@
 package br.com.fiap.minibanco.application.service;
 
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.UserJpa;
 import br.com.fiap.minibanco.application.usecases.VerificationTransactionUsecases;
-import br.com.fiap.minibanco.core.transactionals.DTO.AuthTransactionDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
-import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
-import br.com.fiap.minibanco.infra.config.restClient.ApiUrls;
+import br.com.fiap.minibanco.application.DTO.AuthTransactionDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionRequestDTO;
+import br.com.fiap.minibanco.infra.restClient.ApiUrls;
 import br.com.fiap.minibanco.infra.exception.BalanceInsufficientException;
 import br.com.fiap.minibanco.infra.exception.OracleInputException;
 import br.com.fiap.minibanco.infra.exception.SameCPFException;

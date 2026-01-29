@@ -1,11 +1,9 @@
 package br.com.fiap.minibanco.application.usecases;
 
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionResponseDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionRequestDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.math.BigDecimal;
 
 public interface TransactionUsecases
 {

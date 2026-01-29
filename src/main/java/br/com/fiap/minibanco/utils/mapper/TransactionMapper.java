@@ -1,15 +1,14 @@
 package br.com.fiap.minibanco.utils.mapper;
 
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.TransactionJPA;
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
-import br.com.fiap.minibanco.core.transactionals.DTO.DataUsersTransactionDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionRequestDTO;
-import br.com.fiap.minibanco.core.transactionals.DTO.TransactionResponseDTO;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.TransactionJPA;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.UserJpa;
+import br.com.fiap.minibanco.application.DTO.DataUsersTransactionDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionRequestDTO;
+import br.com.fiap.minibanco.application.DTO.TransactionResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")

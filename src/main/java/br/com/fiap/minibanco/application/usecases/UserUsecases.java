@@ -1,10 +1,10 @@
 package br.com.fiap.minibanco.application.usecases;
 
-import br.com.fiap.minibanco.adapters.outbound.JPA.entities.UserJpa;
-import br.com.fiap.minibanco.core.user.DTO.UserLoginDTO;
-import br.com.fiap.minibanco.core.user.DTO.UserLoginResponseDTO;
-import br.com.fiap.minibanco.core.user.DTO.UserRegistroDto;
-import br.com.fiap.minibanco.core.user.DTO.UserResponseDTO;
+import br.com.fiap.minibanco.infra.adapters.outbound.persistence.entities.UserJpa;
+import br.com.fiap.minibanco.application.DTO.UserLoginDTO;
+import br.com.fiap.minibanco.application.DTO.UserLoginResponseDTO;
+import br.com.fiap.minibanco.application.DTO.UserRegistroDto;
+import br.com.fiap.minibanco.application.DTO.UserResponseDTO;
 
 public interface UserUsecases
 {
